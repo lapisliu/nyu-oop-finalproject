@@ -57,3 +57,6 @@ local.properties
 
 # IntelliJ
 out/
+
+# VS code
+.vscode
