@@ -2,16 +2,17 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Login {
+public class StudentLogin {
     private JFrame frame;
     private JTextField userTextField;
     private JPasswordField passwordField;
     private JButton loginButton;
 
-    public Login() {
+    private static StudentLogin instance;
+
+    private StudentLogin() {
         frame = new JFrame("Student Account Log In");
         frame.setSize(300, 200);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
 
         // Username label and text field
@@ -41,7 +42,7 @@ public class Login {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                authenticateUser(); // Authentication logic
+                authenticateUser();
             }
         });
 
@@ -51,12 +52,41 @@ public class Login {
 
     // Method to authenticate user
     private void authenticateUser() {
-        String username = userTextField.getText();
+        String username = userTextField.getText().trim();
+        if(username.isEmpty()){
+            JOptionPane.showMessageDialog(frame, "Please enter a username");
+            return;
+        }
         String password = new String(passwordField.getPassword());
-        // Authentication logic goes here
+        if(StudentStorage.isStudentRegistered(username)){
+            if(StudentStorage.isPasswordCorrect(username,password)){
+                StudentMainInterface studentMainInterface = new StudentMainInterface(StudentStorage.getInstance().getStudentByName(username));
+                frame.dispose();
+            }else{
+                JOptionPane.showMessageDialog(frame, "Incorrect password");
+            }
+        }else{
+            StudentStorage storage = StudentStorage.getInstance();
+            Student student = new Student(username);
+            storage.addStudent(student,password);
+            StudentMainInterface studentMainInterface = new StudentMainInterface(student);
+            JOptionPane.showMessageDialog(frame, "New user created");
+            frame.dispose();
+        }
+    }
+
+    public void setVisible(){
+        frame.setVisible(true);
+    }
+
+    public static StudentLogin getInstance(){
+        if(instance==null){
+            instance = new StudentLogin();
+        }
+        return instance;
     }
 
     public static void main(String[] args) {
-        new Login();
+        StudentLogin.getInstance();
     }
 }
