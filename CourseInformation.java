@@ -10,9 +10,9 @@ public class CourseInformation {
     private JLabel courseTimeLabel;
     private String[] columnNames = { "Assignment", "Score", "Weight (%)", "Weighted Score", "Letter Grade" };
 
-    public CourseInformation(String courseName, String instructor, String courseTime, Object[][] gradesData) {
+    public CourseInformation(Student student, Course course) {
         // Set up the frame
-        frame = new JFrame(courseName + " Information");
+        frame = new JFrame(course.getName() + " Information");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
@@ -21,19 +21,17 @@ public class CourseInformation {
         courseInfoPanel.setLayout(new BoxLayout(courseInfoPanel, BoxLayout.Y_AXIS));
         courseInfoPanel.setBorder(BorderFactory.createTitledBorder("Course Information"));
 
-        courseNameLabel = new JLabel("Course Name: " + courseName);
-        instructorLabel = new JLabel("Instructor: " + instructor);
-        courseTimeLabel = new JLabel("Course Time: " + courseTime);
+        courseNameLabel = new JLabel("Course Name: " + course.getName());
+        instructorLabel = new JLabel("Instructor: " + course.getInstructor());
+        courseTimeLabel = new JLabel("Course Time: " + course.getTime());
 
         courseInfoPanel.add(courseNameLabel);
         courseInfoPanel.add(instructorLabel);
         courseInfoPanel.add(courseTimeLabel);
-
-        // Add courseInfoPanel to the frame
         frame.add(courseInfoPanel, BorderLayout.NORTH);
 
         // Convert gradesData to include the percentage and letter grade
-        Object[][] tableData = calculateGradesData(gradesData);
+        Object[][] tableData = calculateGradesData(course,student.getGradeByCourse(course.getCourseId()));
 
         // Grades table
         gradesTable = new JTable(tableData, columnNames);
@@ -48,49 +46,45 @@ public class CourseInformation {
         frame.setVisible(true);
     }
 
-    private Object[][] calculateGradesData(Object[][] gradesData) {
+    private Object[][] calculateGradesData(Course course, Grade grade) {
         double totalWeightedScore = 0;
-        double totalWeight = 0;
+        int assigmentTypeCount = AssignmentType.values().length;
         // Initialize a new array with one additional row for the final grade
-        Object[][] completeData = new Object[gradesData.length + 1][columnNames.length];
+        Object[][] completeData = new Object[assigmentTypeCount + 1][columnNames.length];
 
-        for (int i = 0; i < gradesData.length; i++) {
-            Object[] row = gradesData[i];
-            // Initialize the row with the number of columns specified
+        for (int i = 0; i < assigmentTypeCount; i++) {
             completeData[i] = new Object[columnNames.length];
+            AssignmentType type = AssignmentType.values()[i];
 
-            String assignment = (String) row[0];
-            double score = (double) row[1];
-            double weight = (double) row[2];
-            double weightedScore = score * weight * 0.01; // Corrected weighted score calculation
+            String assignment = type.toString();
+            double score = grade.getGradeByType(type);
+            double weight = course.getWeightByType(type);
+            double weightedScore = score * weight;
             totalWeightedScore += weightedScore;
-            totalWeight += weight;
 
             // Store the values in the new row
             completeData[i][0] = assignment;
             completeData[i][1] = score;
             completeData[i][2] = weight;
             completeData[i][3] = weightedScore;
-            completeData[i][4] = convertScoreToGrade(weightedScore); // Here you need to convert the weighted score, not the raw score
+            completeData[i][4] = convertScoreToGrade(weightedScore,weight); // Here you need to convert the weighted score, not the raw score
         }
 
         // Calculate the final grade as the sum of all weighted scores
-        double finalGradeValue = totalWeightedScore;
-        String finalGrade = convertScoreToGrade(finalGradeValue);
+        String finalGrade = convertScoreToGrade(totalWeightedScore, 1.0);
 
         // Add the final grade to the last row
-        completeData[gradesData.length][0] = "Final Grade";
-        completeData[gradesData.length][1] = null; // No score for the final grade row
-        completeData[gradesData.length][2] = null; // No weight for the final grade row
-        completeData[gradesData.length][3] = finalGradeValue;
-        completeData[gradesData.length][4] = finalGrade;
+        completeData[assigmentTypeCount][0] = "Final Grade";
+        completeData[assigmentTypeCount][1] = null;
+        completeData[assigmentTypeCount][2] = null;
+        completeData[assigmentTypeCount][3] = totalWeightedScore;
+        completeData[assigmentTypeCount][4] = finalGrade;
 
         return completeData;
     }
 
-    private String convertScoreToGrade(double weightedScore) {
-        // Here you should convert weightedScore to a percentage if your total weights don't add up to 100
-        double score = weightedScore; // This assumes totalWeight adds up to 100
+    private String convertScoreToGrade(double weightedScore, double weight) {
+        double score = weightedScore / weight;
 
         if (score >= 93) return "A";
         else if (score >= 90) return "A-";
@@ -107,17 +101,15 @@ public class CourseInformation {
     }
 
     // Main method for testing
-    public static void main(String[] args) {
-        Object[][] data = {
-            {"Homework 1", 92.0, 10.0},
-            {"Homework 2", 85.0, 10.0},
-            {"Quiz 1", 78.0, 10.0},
-            {"Quiz 2", 88.0, 10.0},
-            {"Midterm", 74.0, 20.0},
-            {"Final Exam", 91.0, 25.0},
-            {"Group Project", 97.0, 15.0}
-        };
-
-        new CourseInformation("Calculus I", "Dr. Smith", "MWF 10-11 AM", data);
-    }
+//    public static void main(String[] args) {
+//        Object[][] data = {
+//            {"Homework 1", 92.0, 10.0},
+//            {"Homework 2", 85.0, 10.0},
+//            {"Quiz 1", 78.0, 10.0},
+//            {"Quiz 2", 88.0, 10.0},
+//            {"Midterm", 74.0, 20.0},
+//            {"Final Exam", 91.0, 25.0},
+//            {"Group Project", 97.0, 15.0}
+//        };
+//    }
 }
