@@ -10,6 +10,8 @@ public class Course {
     private Double midtermWeight=0.3;
     private Double finalWeight=0.5;
 
+    private static int studentCount=0;
+
 
     public Course(String name, String instructor, String time) {
         this.courseId = id++;
@@ -40,6 +42,14 @@ public class Course {
             case MIDTERM -> midtermWeight;
             case FINAL -> finalWeight;
         };
+    }
+
+    public int getStudentCount(){
+        return studentCount;
+    }
+
+    public void incrementStudentCount(){
+        ++studentCount;
     }
 
     @Override

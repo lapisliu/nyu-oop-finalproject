@@ -39,6 +39,7 @@ class AvailableCourses {
                 Course selectedCourse = coursesList.getSelectedValue();
                 if (selectedCourse != null) {
                     student.enrollInCourse(selectedCourse);
+                    selectedCourse.incrementStudentCount();
                     JOptionPane.showMessageDialog(frame, "You have enrolled in " + selectedCourse);
                 }
             }
