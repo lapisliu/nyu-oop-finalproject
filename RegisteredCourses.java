@@ -26,9 +26,11 @@ public class RegisteredCourses {
 
         viewCourseButton = new JButton("View Course");
         viewCourseButton.addActionListener(e -> {
-            Course selectedCourse = coursesList.getSelectedValue();
-            if (selectedCourse != null) {
-                CourseInformation courseInformation = new CourseInformation(student, selectedCourse);
+            if (coursesList != null) {
+                Course selectedCourse = coursesList.getSelectedValue();
+                if (selectedCourse != null) {
+                    CourseInformation courseInformation = new CourseInformation(student, selectedCourse);
+                }
             }
         });
         frame.add(viewCourseButton, BorderLayout.SOUTH);
