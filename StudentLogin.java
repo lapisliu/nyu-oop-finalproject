@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 
 public class StudentLogin {
     private JFrame frame;
+    private JLabel userLoginLabel;
     private JTextField userTextField;
     private JPasswordField passwordField;
     private JButton loginButton;
@@ -12,30 +13,35 @@ public class StudentLogin {
 
     private StudentLogin() {
         frame = new JFrame("Student Account Log In");
-        frame.setSize(300, 200);
+        frame.setSize(300, 300);
         frame.setLayout(null);
+
+        // User login label
+        userLoginLabel = new JLabel("User Login");
+        userLoginLabel.setBounds(100, 0, 100, 25);
+        frame.add(userLoginLabel);
 
         // Username label and text field
         JLabel userLabel = new JLabel("Username:");
-        userLabel.setBounds(10, 10, 80, 25);
+        userLabel.setBounds(10, 50, 80, 25);
         frame.add(userLabel);
 
         userTextField = new JTextField(20);
-        userTextField.setBounds(100, 10, 160, 25);
+        userTextField.setBounds(100, 50, 160, 25);
         frame.add(userTextField);
 
         // Password label and password field
         JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setBounds(10, 40, 80, 25);
+        passwordLabel.setBounds(10, 100, 80, 25);
         frame.add(passwordLabel);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(100, 40, 160, 25);
+        passwordField.setBounds(100, 100, 160, 25);
         frame.add(passwordField);
 
         // Login button
         loginButton = new JButton("Login");
-        loginButton.setBounds(10, 80, 80, 25);
+        loginButton.setBounds(100, 150, 80, 25);
         frame.add(loginButton);
 
         // Action listener for login button
