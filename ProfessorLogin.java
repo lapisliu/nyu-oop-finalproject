@@ -2,24 +2,24 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class StudentLogin {
+public class ProfessorLogin {
     private JFrame frame;
     private JLabel userLoginLabel;
     private JTextField userTextField;
     private JPasswordField passwordField;
     private JButton loginButton;
 
-    private JButton loginAsProfessorButton;
+    private JButton loginAsStudentButton;
 
-    private static StudentLogin instance;
+    private static ProfessorLogin instance;
 
-    private StudentLogin() {
-        frame = new JFrame("Student Account Log In");
+    private ProfessorLogin() {
+        frame = new JFrame("Professor Account Log In");
         frame.setSize(300, 300);
         frame.setLayout(null);
 
         // User login label
-        userLoginLabel = new JLabel("Student Login");
+        userLoginLabel = new JLabel("Professor Login");
         userLoginLabel.setBounds(100, 0, 100, 25);
         frame.add(userLoginLabel);
 
@@ -54,13 +54,13 @@ public class StudentLogin {
             }
         });
 
-        loginAsProfessorButton = new JButton("Login as Professor");
-        loginAsProfessorButton.setBounds(50, 200, 180, 25);
-        loginAsProfessorButton.addActionListener(e -> {
-            ProfessorLogin.getInstance().setVisible();
+        loginAsStudentButton = new JButton("Login as Student");
+        loginAsStudentButton.setBounds(50, 200, 180, 25);
+        loginAsStudentButton.addActionListener(e -> {
+            StudentLogin.getInstance().setVisible();
             frame.dispose();
         });
-        frame.add(loginAsProfessorButton);
+        frame.add(loginAsStudentButton);
 
         // Display the frame
         frame.setVisible(true);
@@ -74,20 +74,16 @@ public class StudentLogin {
             return;
         }
         String password = new String(passwordField.getPassword());
-        if(StudentStorage.isStudentRegistered(username)){
-            if(StudentStorage.isPasswordCorrect(username,password)){
-                StudentMainInterface studentMainInterface = new StudentMainInterface(StudentStorage.getInstance().getStudentByName(username));
-                frame.dispose();
+        ProfessorStorage professorStorage = ProfessorStorage.getInstance();
+        if(ProfessorStorage.isProfessorRegistered(username)){
+            if(ProfessorStorage.isPasswordCorrect(username,password)){
+                frame.setVisible(false);
+                ProfessorMainInterface professorMainInterface = new ProfessorMainInterface(professorStorage.getProfessorByName(username));
             }else{
                 JOptionPane.showMessageDialog(frame, "Incorrect password");
             }
         }else{
-            StudentStorage storage = StudentStorage.getInstance();
-            Student student = new Student(username);
-            storage.addStudent(student,password);
-            StudentMainInterface studentMainInterface = new StudentMainInterface(student);
-            JOptionPane.showMessageDialog(frame, "New student user created");
-            frame.dispose();
+            JOptionPane.showMessageDialog(frame, "professor does not exist");
         }
     }
 
@@ -95,14 +91,10 @@ public class StudentLogin {
         frame.setVisible(true);
     }
 
-    public static StudentLogin getInstance(){
+    public static ProfessorLogin getInstance(){
         if(instance==null){
-            instance = new StudentLogin();
+            instance = new ProfessorLogin();
         }
         return instance;
-    }
-
-    public static void main(String[] args) {
-        StudentLogin.getInstance();
     }
 }
