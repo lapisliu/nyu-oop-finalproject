@@ -35,7 +35,7 @@ public class Student {
     }
 
     public void setGrade(int courseId, AssignmentType type, Double score){
-        Grade grade = grades.getOrDefault(courseId+"",new Grade());
+        Grade grade = grades.getOrDefault(courseId,new Grade());
         grade.setGradeByType(type,score);
         grades.put(courseId,grade);
     }
