@@ -4,9 +4,11 @@ import java.util.List;
 
 public class RegisteredCourses {
     private JFrame frame;
-    private JList<String> coursesList;
+    private JList<Course> coursesList;
+    private JButton viewCourseButton;
 
-    public RegisteredCourses(List<String> registeredCourses) {
+    public RegisteredCourses(Student student) {
+        List<Course> registeredCourses = student.getRegisteredCourses();
         frame = new JFrame("Registered Courses");
         frame.setSize(300, 400);
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -16,16 +18,21 @@ public class RegisteredCourses {
             JLabel emptyLabel = new JLabel("No registered courses.");
             frame.add(emptyLabel);
         } else {
-            coursesList = new JList<>(registeredCourses.toArray(new String[0]));
+            coursesList = new JList<>();
+            coursesList.setListData(registeredCourses.toArray(new Course[0]));
             JScrollPane scrollPane = new JScrollPane(coursesList);
             frame.add(scrollPane, BorderLayout.CENTER);
         }
 
-        frame.setVisible(true);
-    }
+        viewCourseButton = new JButton("View Course");
+        viewCourseButton.addActionListener(e -> {
+            Course selectedCourse = coursesList.getSelectedValue();
+            if (selectedCourse != null) {
+                CourseInformation courseInformation = new CourseInformation(student, selectedCourse);
+            }
+        });
+        frame.add(viewCourseButton, BorderLayout.SOUTH);
 
-    // Main method for testing
-    public static void main(String[] args) {
-        new RegisteredCourses(List.of("Calculus I", "History"));
+        frame.setVisible(true);
     }
 }

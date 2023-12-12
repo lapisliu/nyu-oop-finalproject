@@ -2,25 +2,30 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 
 class AvailableCourses {
+    private static final Course[] availableCourses;
+    static {
+        availableCourses = new Course[4];
+        availableCourses[0] = new Course("CS 101", "John Doe", "MWF 10:00 AM");
+        availableCourses[1] = new Course("CS 102", "John Doe", "MWF 11:00 AM");
+        availableCourses[2] = new Course("CS 201", "David Smith", "TuTr 12:00 PM");
+        availableCourses[3] = new Course("CS 202", "David Smith", "MWF 1:00 PM");
+    }
+
     private JFrame frame;
-    private JList<String> coursesList;
+    private JList<Course> coursesList;
     private JButton enrollButton;
     private JButton backButton;
-    private MainInterface mainInterface;
 
-    public AvailableCourses(MainInterface mainInterface) {
-        this.mainInterface = mainInterface;
-        
+    public AvailableCourses(Student student) {
         frame = new JFrame("Available Courses");
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        String[] coursesArray = {"Physics", "Chemistry", "Literature", "Calculus"};
-        coursesList = new JList<>(coursesArray); // Directly create a JList from an array
+        coursesList = new JList<>(); // Directly create a JList from an array
+        coursesList.setListData(availableCourses); // Set the data of the JList to the available courses
         JScrollPane scrollPane = new JScrollPane(coursesList);
         frame.add(scrollPane, BorderLayout.CENTER);
 
@@ -37,22 +42,15 @@ class AvailableCourses {
         enrollButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Enroll logic here
-                String selectedCourse = coursesList.getSelectedValue();
+                Course selectedCourse = coursesList.getSelectedValue();
                 if (selectedCourse != null) {
-                    mainInterface.updateRegisteredCourses(selectedCourse);
+                    student.enrollInCourse(selectedCourse);
                     JOptionPane.showMessageDialog(frame, "You have enrolled in " + selectedCourse);
                 }
             }
         });
 
-        backButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Close the AvailableCourses window and show the main interface again
-                frame.dispose();
-                mainInterface.showMainInterface(); // Make sure this method correctly sets the main interface frame to visible
-            }
-        });
-        
+        backButton.addActionListener(e -> frame.dispose());
 
         frame.setVisible(true);
     }
