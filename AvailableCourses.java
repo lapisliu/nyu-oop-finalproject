@@ -4,15 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 class AvailableCourses {
-    private static final Course[] availableCourses;
-    static {
-        availableCourses = new Course[4];
-        availableCourses[0] = new Course("CS 101", "John Doe", "MWF 10:00 AM");
-        availableCourses[1] = new Course("CS 102", "John Doe", "MWF 11:00 AM");
-        availableCourses[2] = new Course("CS 201", "David Smith", "TuTr 12:00 PM");
-        availableCourses[3] = new Course("CS 202", "David Smith", "MWF 1:00 PM");
-    }
-
     private JFrame frame;
     private JList<Course> coursesList;
     private JButton enrollButton;
@@ -24,8 +15,11 @@ class AvailableCourses {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
+        // Get the available courses
+        java.util.List<Course> availableCourses = CourseStorage.getInstance().getCourseList();
+
         coursesList = new JList<>(); // Directly create a JList from an array
-        coursesList.setListData(availableCourses); // Set the data of the JList to the available courses
+        coursesList.setListData(availableCourses.toArray(new Course[0])); // Set the data of the JList to the available courses
         JScrollPane scrollPane = new JScrollPane(coursesList);
         frame.add(scrollPane, BorderLayout.CENTER);
 
