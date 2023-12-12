@@ -46,4 +46,13 @@ public class Grade {
             case FINAL -> finalGrade;
         };
     }
+
+    @Override
+    public String toString() {
+        return "Grade{" +
+                "homeworkGrade=" + homeworkGrade +
+                ", midtermGrade=" + midtermGrade +
+                ", finalGrade=" + finalGrade +
+                '}';
+    }
 }

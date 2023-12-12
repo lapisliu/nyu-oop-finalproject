@@ -23,16 +23,6 @@ public class StudentStorage {
         studentPasswordMap.put(student.getName(),password);
     }
 
-    public boolean removeStudentById(int studentId){
-        for (int i = 0; i < studentList.size(); i++) {
-            if(studentList.get(i).getStudentId()==studentId){
-                studentList.remove(i);
-                studentPasswordMap.remove(studentList.get(i).getName());
-                return true;
-            }
-        }
-        return false;
-    }
 
     public Student getStudentById(int id){
         for (Student student : studentList) {
@@ -50,6 +40,10 @@ public class StudentStorage {
             }
         }
         throw new NoSuchElementException();
+    }
+
+    public List<Student> getStudentList(){
+        return new ArrayList<>(studentList);
     }
 
     public static boolean isStudentRegistered(String name){
