@@ -49,8 +49,4 @@ public class ProfessorMainInterface{
 
         frame.setVisible(true);
     }
-
-    public static void main(String[] args) {
-        new ProfessorMainInterface(new Professor("test", CourseStorage.getInstance().getCourseList()));
-    }
 }
