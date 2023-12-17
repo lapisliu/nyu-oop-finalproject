@@ -11,13 +11,10 @@ public class StudentMainInterface {
     private JButton enrollInCoursesButton;
 
     private JButton logoutButton;
-
-    private List<String> registeredCourses;
     private Student student;
 
     public StudentMainInterface(Student student) {
         this.student = student;
-        registeredCourses = new ArrayList<>();
 
         frame = new JFrame("Student Main Interface");
         frame.setSize(400, 300);
