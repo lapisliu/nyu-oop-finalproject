@@ -100,16 +100,4 @@ public class CourseInformation {
         else return "F";
     }
 
-    // Main method for testing
-//    public static void main(String[] args) {
-//        Object[][] data = {
-//            {"Homework 1", 92.0, 10.0},
-//            {"Homework 2", 85.0, 10.0},
-//            {"Quiz 1", 78.0, 10.0},
-//            {"Quiz 2", 88.0, 10.0},
-//            {"Midterm", 74.0, 20.0},
-//            {"Final Exam", 91.0, 25.0},
-//            {"Group Project", 97.0, 15.0}
-//        };
-//    }
 }
